@@ -51,6 +51,10 @@ export type SubmissionHandlerArgs = {
   req: PayloadRequest
 }
 
+export type SubmissionGuardArgs = SubmissionHandlerArgs & {
+  rawData: Record<string, unknown>
+}
+
 export type CleverFormsPluginOptions = {
   enabled?: boolean
   formsSlug?: string
@@ -59,5 +63,6 @@ export type CleverFormsPluginOptions = {
   fields?: CleverFormsFieldConfig
   extendFormsCollection?: (collection: CollectionConfig) => CollectionConfig
   extendSubmissionsCollection?: (collection: CollectionConfig) => CollectionConfig
+  beforeSubmission?: (args: SubmissionGuardArgs) => Promise<void> | void
   onSubmission?: (args: SubmissionHandlerArgs) => Promise<void> | void
 }
