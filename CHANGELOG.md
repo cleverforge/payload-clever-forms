@@ -22,4 +22,4 @@ Initial public core implementation.
 - English, Spanish, and French translation tables
 - automated tests
 - GitHub Actions CI
-- MIT license
+- Apache-2.0 license and NOTICE
