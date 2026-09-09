@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { conditionMatches } from '../runtime/logic.js'
 import { CleverFormsValidationError, validateSubmission } from '../runtime/validation.js'
+import { CleverFormsSchemaError, validateFormSchema } from '../runtime/schemaValidation.js'
 import type { CleverFormDefinition } from '../types.js'
 
 const form: CleverFormDefinition = {
@@ -32,4 +33,35 @@ test('validation rejects forged choices', () => {
     () => validateSubmission(form, { email: 'person@example.org', role: 'admin' }),
     CleverFormsValidationError,
   )
+})
+
+test('schema validation accepts a coherent form', () => {
+  assert.doesNotThrow(() => validateFormSchema(form))
+})
+
+test('schema validation rejects duplicate names and missing references', () => {
+  const invalid: CleverFormDefinition = {
+    id: 'invalid',
+    title: 'Invalid',
+    pages: [{ fields: [
+      { name: 'email', label: 'Email', type: 'text' },
+      { name: 'email', label: 'Duplicate', type: 'text' },
+      { name: 'detail', label: 'Detail', type: 'text', conditionalLogic: { enabled: true, field: 'missing', operator: 'equals', value: 'yes' } },
+    ] }],
+  }
+  assert.throws(() => validateFormSchema(invalid), CleverFormsSchemaError)
+})
+
+test('schema validation rejects choice fields without valid unique choices', () => {
+  const invalid: CleverFormDefinition = {
+    id: 'choices',
+    title: 'Choices',
+    pages: [{ fields: [{
+      name: 'role', label: 'Role', type: 'select', choices: [
+        { label: 'One', value: 'same' },
+        { label: 'Two', value: 'same' },
+      ],
+    }] }],
+  }
+  assert.throws(() => validateFormSchema(invalid), CleverFormsSchemaError)
 })

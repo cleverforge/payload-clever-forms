@@ -16,7 +16,8 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --test dist/tests/*.test.js",
-    "ci": "npm run typecheck && npm test"
+    "pack:check": "npm pack --dry-run",
+    "ci": "npm run typecheck && npm test && npm run pack:check"
   },
   "peerDependencies": {
     "payload": ">=3.0.0",
@@ -28,6 +29,9 @@
     "payload": ">=3.0.0",
     "react": "^19.0.0",
     "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20.9.0"
   },
   "keywords": ["payload", "payloadcms", "payload-plugin", "forms", "form-builder", "nextjs", "react", "cleverforge"],
   "license": "Apache-2.0",

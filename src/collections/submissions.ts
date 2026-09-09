@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import type { CleverFormsPluginOptions } from '../types.js'
-import { createSubmissionHook } from '../runtime/submissionHook.js'
+import { createAfterSubmissionHook, createSubmissionHook } from '../runtime/submissionHook.js'
 
 export const createSubmissionsCollection = (
   slug: string,
@@ -16,7 +16,10 @@ export const createSubmissionsCollection = (
     update: ({ req }) => Boolean(req.user),
     delete: ({ req }) => Boolean(req.user),
   },
-  hooks: { beforeChange: [createSubmissionHook(formsSlug, options)] },
+  hooks: {
+    beforeChange: [createSubmissionHook(formsSlug, options)],
+    afterChange: [createAfterSubmissionHook(formsSlug, options)],
+  },
   fields: [
     { name: 'form', type: 'relationship', relationTo: formsSlug, required: true, index: true },
     { name: 'status', type: 'select', required: true, defaultValue: 'submitted', options: ['submitted'], admin: { readOnly: true } },
