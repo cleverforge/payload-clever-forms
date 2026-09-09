@@ -1,4 +1,4 @@
-import type { CollectionBeforeChangeHook } from 'payload'
+import type { CollectionAfterChangeHook, CollectionBeforeChangeHook } from 'payload'
 import type { CleverFormDefinition, CleverFormsPluginOptions } from '../types.js'
 import { validateSubmission } from './validation.js'
 
@@ -15,16 +15,26 @@ export const createSubmissionHook = (
   if (form.status !== 'published') throw new Error('This form is not accepting submissions.')
   if (form.settings?.requireAuthentication && !req.user) throw new Error('Authentication is required to submit this form.')
 
-  const validated = validateSubmission(form, (data.data ?? {}) as Record<string, unknown>)
+  const rawData = (data.data ?? {}) as Record<string, unknown>
+  if (options.beforeSubmission) await options.beforeSubmission({ form, data: rawData, rawData, req })
 
+  const validated = validateSubmission(form, rawData)
   data.data = validated
   data.status = 'submitted'
   data.submittedAt = new Date().toISOString()
-  delete data.integrationResults
-  delete data.ipAddress
-  delete data.userAgent
-
-  if (options.onSubmission) await options.onSubmission({ form, data: validated, req })
 
   return data
+}
+
+export const createAfterSubmissionHook = (
+  formsSlug: string,
+  options: CleverFormsPluginOptions,
+): CollectionAfterChangeHook => async ({ doc, operation, req }) => {
+  if (operation !== 'create' || !options.onSubmission) return doc
+
+  const formID = typeof doc.form === 'object' && doc.form !== null ? doc.form.id : doc.form
+  const form = await req.payload.findByID({ collection: formsSlug, id: formID, depth: 0, req }) as unknown as CleverFormDefinition
+  await options.onSubmission({ form, data: (doc.data ?? {}) as Record<string, unknown>, req })
+
+  return doc
 }
