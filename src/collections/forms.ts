@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { createFormFields } from '../fields/formFields.js'
-import type { CleverFormsFieldConfig } from '../types.js'
+import type { CleverFormDefinition, CleverFormsFieldConfig } from '../types.js'
+import { validateFormSchema } from '../runtime/schemaValidation.js'
 
 export const createFormsCollection = (
   slug: string,
@@ -18,6 +19,12 @@ export const createFormsCollection = (
     create: ({ req }) => Boolean(req.user),
     update: ({ req }) => Boolean(req.user),
     delete: ({ req }) => Boolean(req.user),
+  },
+  hooks: {
+    beforeValidate: [({ data }) => {
+      if (data) validateFormSchema(data as unknown as CleverFormDefinition)
+      return data
+    }],
   },
   fields: [
     { name: 'title', type: 'text', required: true, localized: true },
