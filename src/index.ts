@@ -22,7 +22,7 @@ export { cleverFormsTranslations } from './i18n/index.js'
 
 export const cleverForms = definePlugin<CleverFormsPluginOptions>({
   slug: '@cleverforge/payload-clever-forms',
-  plugin: ({ config, options }) => {
+  plugin: ({ config, plugins: _plugins, ...options }) => {
     if (options.enabled === false) return config
 
     const formsSlug = options.formsSlug ?? 'clever-forms'
