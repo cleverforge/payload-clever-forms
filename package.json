@@ -11,7 +11,7 @@
     "./client": { "types": "./dist/runtime/client.d.ts", "import": "./dist/runtime/client.js" },
     "./i18n": { "types": "./dist/i18n/index.d.ts", "import": "./dist/i18n/index.js" }
   },
-  "files": ["dist", "README.md", "LICENSE", "CHANGELOG.md"],
+  "files": ["dist", "README.md", "LICENSE", "NOTICE", "CHANGELOG.md"],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -30,7 +30,7 @@
     "typescript": "^5.7.0"
   },
   "keywords": ["payload", "payloadcms", "payload-plugin", "forms", "form-builder", "nextjs", "react", "cleverforge"],
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": { "type": "git", "url": "git+https://github.com/cleverforge/payload-clever-forms.git" },
   "bugs": { "url": "https://github.com/cleverforge/payload-clever-forms/issues" },
   "homepage": "https://github.com/cleverforge/payload-clever-forms#readme"
