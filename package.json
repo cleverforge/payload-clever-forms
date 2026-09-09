@@ -1,0 +1,37 @@
+{
+  "name": "@cleverforge/payload-clever-forms",
+  "version": "0.1.0",
+  "description": "Universal form builder and React runtime for Payload CMS",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    "./react": { "types": "./dist/react/index.d.ts", "import": "./dist/react/index.js" },
+    "./client": { "types": "./dist/runtime/client.d.ts", "import": "./dist/runtime/client.js" },
+    "./i18n": { "types": "./dist/i18n/index.d.ts", "import": "./dist/i18n/index.js" }
+  },
+  "files": ["dist", "README.md", "LICENSE", "NOTICE", "CHANGELOG.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test dist/tests/*.test.js",
+    "ci": "npm run typecheck && npm test"
+  },
+  "peerDependencies": {
+    "payload": ">=3.0.0",
+    "react": ">=18.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "payload": ">=3.0.0",
+    "react": "^19.0.0",
+    "typescript": "^5.7.0"
+  },
+  "keywords": ["payload", "payloadcms", "payload-plugin", "forms", "form-builder", "nextjs", "react", "cleverforge"],
+  "license": "Apache-2.0",
+  "repository": { "type": "git", "url": "git+https://github.com/cleverforge/payload-clever-forms.git" },
+  "bugs": { "url": "https://github.com/cleverforge/payload-clever-forms/issues" },
+  "homepage": "https://github.com/cleverforge/payload-clever-forms#readme"
+}
