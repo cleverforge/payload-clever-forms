@@ -15,8 +15,9 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "npm run build && node --test dist/tests/*.test.js",
-    "test:integration": "npm run build && node --test dist/tests/integration.test.js",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "npm run build && node --test dist/tests/core.test.js",
+    "test:integration": "npm run build && node --test --test-force-exit dist/tests/integration.test.js",
     "pack:check": "npm pack --dry-run",
     "exports:check": "npm run build && node scripts/verify-exports.mjs",
     "ci": "npm run typecheck && npm test && npm run exports:check && npm run pack:check",
@@ -35,7 +36,7 @@
     "typescript": "^5.7.0"
   },
   "engines": {
-    "node": ">=20.9.0"
+    "node": ">=20.14.0"
   },
   "publishConfig": {
     "access": "public",
